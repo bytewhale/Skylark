@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
-import { Layout, LayoutHeader, LayoutContent } from 'ant-design-vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 
 const props = defineProps<{
@@ -22,12 +20,19 @@ const handleCollapseClick = () => {
       <menu-unfold-outlined v-if="props.collapsed" class="trigger" @click="handleCollapseClick" />
       <menu-fold-outlined v-else class="trigger" @click="handleCollapseClick" />
     </a-layout-header>
-    <a-layout-content
-      :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-    >
-      Content
-    </a-layout-content>
+    <slot></slot>
   </a-layout>
 </template>
 
-<style scoped lang="postcss"></style>
+<style scoped lang="postcss">
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.trigger:hover {
+  color: #1890ff;
+}
+</style>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, watch, defineProps } from 'vue'
+import { ref } from 'vue'
 import DynamicIcon from '@/components/Common/DynamicIcon.vue'
 
 const props = defineProps<{
   collapsed: boolean
 }>()
 
-const selectedKeys = ref<string[]>(['1'])
+const selectedKeys = ref<number[]>([1])
 const menuList = ref([
   {
     id: 1,
@@ -29,7 +29,7 @@ const menuList = ref([
       <img class="logo-default" src="@/assets/images/skylark-logo.png" alt="" />
       <span class="logo-text" v-show="!props.collapsed">语燕</span>
     </div>
-    <a-menu v-model:selectedKeys="selectedKeys" theme="light" mode="inline">
+    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
       <a-menu-item v-for="menu in menuList" :key="menu.id">
         <DynamicIcon :name="menu.icon" />
         <span>{{ menu.name }}</span>
@@ -41,21 +41,23 @@ const menuList = ref([
 <style scoped lang="postcss">
 .sider {
   height: 100vh;
-  background-color: var(--color-background);
 }
 .logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-background);
-  margin: 20px 6px;
   box-sizing: border-box;
+  width: 100%;
+  height: 64px;
   &-default {
     width: 32px;
     height: 24px;
   }
   &-text {
+    margin-left: 16px;
     font-family: AlibabaPuhuiBold;
+    color: #ffffff;
+    font-size: 16px;
   }
 }
 </style>
