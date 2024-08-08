@@ -8,12 +8,21 @@ const router = createRouter({
       path: '/',
       name: 'root',
       component: Layout,
-      redirect: '/dashboard',
+      redirect: '/note-taking',
       children: [
         {
-          path: "/dashboard",
-          component: () => import('@/views/Dashboard/index.vue')
-        }
+          path: "/note-taking",
+          component: () => import('@/views/NoteTaking/index.vue')
+        },
+        {
+          path: "/client-management",
+          component: () => import('@/views/ClientManagement/index.vue')
+        },
+        {
+          path: "/case-management",
+          component: () => import('@/views/CaseManagement/index.vue')
+        },
+
       ]
     }
   ]
