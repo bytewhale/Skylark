@@ -18,24 +18,24 @@ const defaultOptions: IOptions = {
   onSubmit: () => { },
 };
 
-export function useDialog(options: IOptions = defaultOptions) {
+export function useModal(options: IOptions = defaultOptions) {
   const mergedOptions = { ...defaultOptions, ...options };
   const { defaultVisiable, onShow, onClose, onSubmit } = mergedOptions;
 
-  const visible = ref<boolean>(defaultVisiable as boolean);
+  const open = ref<boolean>(defaultVisiable as boolean);
 
   const show = (data?: any): void => {
     if (onShow) {
       onShow(data);
     }
-    visible.value = true;
+    open.value = true;
   };
 
   const close = (data?: any): void => {
     if (onClose) {
       onClose(data);
     }
-    visible.value = false;
+    open.value = false;
   };
 
   const submit = (data?: any): void => {
@@ -45,7 +45,7 @@ export function useDialog(options: IOptions = defaultOptions) {
   };
 
   return {
-    visible,
+    open,
     show,
     close,
     submit,
