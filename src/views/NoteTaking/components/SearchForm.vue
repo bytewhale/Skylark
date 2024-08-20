@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { reactive, ref } from 'vue';
 	import { SearchOutlined, PlusOutlined } from '@ant-design/icons-vue';
+	import API from '@/api';
 
 	const formRef = ref();
 
@@ -16,6 +17,20 @@
 	const dateFormat = 'YYYY/MM/DD';
 
 	const labelCol = { style: { width: '80px' } };
+
+	const handleSearch = async () => {
+		try {
+			const fetch = async () => {
+				const data = await API.getUserInfo({ uid: 10001 });
+				console.log(`userInfo =>`, data);
+			};
+			for (let i = 0; i <= 100; i++) {
+				await fetch();
+			}
+		} catch (error) {
+			console.log(`error`, error);
+		}
+	};
 </script>
 
 <template>
@@ -26,7 +41,7 @@
 					<a-range-picker v-model:value="formState.timeRange" :format="dateFormat" />
 				</a-form-item>
 				<a-space>
-					<a-button type="primary"><SearchOutlined />搜索</a-button>
+					<a-button type="primary" @click="handleSearch"><SearchOutlined />搜索</a-button>
 					<a-button type="primary" @click="$emit('addRecord')"><PlusOutlined />新增记录</a-button>
 				</a-space>
 			</a-flex>
