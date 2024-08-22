@@ -8,7 +8,7 @@
 	const formState = reactive({
 		id: '',
 		case_type: undefined,
-		client_name: undefined,
+		clientName: undefined,
 		timeRange: [],
 	});
 
@@ -20,13 +20,13 @@
 
 	const handleSearch = async () => {
 		try {
-			const fetch = async () => {
-				const data = await API.getUserInfo({ uid: 10001 });
-				console.log(`userInfo =>`, data);
-			};
-			for (let i = 0; i <= 100; i++) {
-				await fetch();
-			}
+			// const fetch = async () => {
+			// 	const data = await API.getUserInfo({ uid: 10001 });
+			// 	console.log(`userInfo =>`, data);
+			// };
+			// for (let i = 0; i <= 100; i++) {
+			// await fetch();
+			// }
 		} catch (error) {
 			console.log(`error`, error);
 		}
@@ -57,8 +57,8 @@
 					</a-select>
 				</a-form-item>
 
-				<a-form-item label="客户名称" name="client_name">
-					<a-select v-model:value="formState.client_name" style="width: 180px" placeholder="请选择客户名称">
+				<a-form-item label="客户名称" name="clientName">
+					<a-select v-model:value="formState.clientName" style="width: 180px" placeholder="请选择客户名称">
 						<a-select-option value="九策">香江</a-select-option>
 						<a-select-option value="港投">港投</a-select-option>
 					</a-select>

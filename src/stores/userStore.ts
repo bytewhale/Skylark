@@ -1,23 +1,18 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { type IUserInfo } from '@/utils/type';
 
 const userStore = defineStore('userStore', () => {
-  const accessToken = ref("")
+  const userInfo = ref<IUserInfo | null>()
 
-  function setAccessToken(token: string) {
-    accessToken.value = token;
-    localStorage.setItem("accessToken", token)
+  function setUserInfo(payload: IUserInfo) {
+    userInfo.value = payload;
   }
 
-  function logout() {
-    // setAccessToken("")
-
-    // 跳转到登录页面
-    // const { origin } = window.location
-    // window.location.replace(`${origin}/login`)
+  return {
+    userInfo,
+    setUserInfo
   }
-
-  return { accessToken, setAccessToken, logout }
 })
 
 export default userStore

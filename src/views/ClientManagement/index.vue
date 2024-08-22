@@ -4,9 +4,12 @@
 	import Modal from './components/Modal.vue';
 	import { ref } from 'vue';
 	import type { Ref } from 'vue';
+	import { useTable } from '@/composition/useTable';
+	import API from '@/api';
 
 	const modalRef: Ref<InstanceType<typeof Modal> | null> = ref(null);
 	const action = ref('add');
+	const { tableMethods, tableProps, search, pageChange, refresh: refreshTable } = useTable(API.getClientList);
 
 	const handleOpenAddModal = () => {
 		const modalInstance = modalRef.value;
@@ -19,10 +22,10 @@
 
 <template>
 	<div class="index">
-		<SearchForm @addRecord="handleOpenAddModal" />
+		<SearchForm @addRecord="handleOpenAddModal" @search="search" />
 		<a-divider />
-		<Table />
-		<Modal ref="modalRef" :action="action" />
+		<Table :tableMethods="tableMethods" :tableProps="tableProps" />
+		<Modal ref="modalRef" :action="action" :refreshTable="refreshTable" />
 	</div>
 </template>
 

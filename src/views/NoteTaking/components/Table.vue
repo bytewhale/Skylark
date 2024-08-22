@@ -5,7 +5,7 @@
 		id: number;
 		create_time: string;
 		case_type: number;
-		client_name: string;
+		clientName: string;
 		update_time: string;
 		case_id: number;
 		case_name: string;
@@ -26,7 +26,7 @@
 		{ title: 'ID', dataIndex: 'id', key: 'id' },
 		{ title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
 		{ title: '诉讼类型', dataIndex: 'case_type', key: 'case_type' },
-		{ title: '客户名称', dataIndex: 'client_name', key: 'client_name' },
+		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
 		{ title: '更新日期', dataIndex: 'update_time', key: 'update_time' },
 		{ title: '操作', key: 'edit' },
 	];
@@ -61,7 +61,7 @@
 					id: i + 1,
 					create_time: `2014-12-24 23:12:00`,
 					case_type: 1,
-					client_name: '九策',
+					clientName: '九策',
 					update_time: `2014-12-24 23:12:00`,
 					case_id: i + 1,
 					case_name: '香江',
@@ -82,7 +82,7 @@
 					id: i + 1,
 					create_time: `2014-12-24 23:12:00`,
 					case_type: 2,
-					client_name: '港航投资',
+					clientName: '港航投资',
 					update_time: `2014-12-24 23:12:00`,
 					case_id: 0,
 					case_name: '',

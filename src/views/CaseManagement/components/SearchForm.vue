@@ -29,7 +29,7 @@
 							<a-select-option value="2">非诉案件</a-select-option>
 						</a-select>
 					</a-form-item>
-					<a-form-item label="案件名称" name="client_name">
+					<a-form-item label="案件名称" name="clientName">
 						<a-input v-model:value="formState.case_name" style="width: 180px" placeholder="请输入客户名称" />
 					</a-form-item>
 				</a-space>

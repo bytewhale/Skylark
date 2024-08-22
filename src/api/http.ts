@@ -1,6 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import useAppStore from '@/stores/appStore';
-import userStore from '@/stores/userStore';
 import { message } from 'ant-design-vue';
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({
@@ -46,7 +45,7 @@ axiosInstance.interceptors.response.use(
       }
 
       if (code == 100001 || code == 100007 || code == 100008) {
-        const userStoreInstance = userStore();
+        const userStoreInstance = useAppStore();
 
         userStoreInstance.logout()
       }

@@ -6,7 +6,7 @@
 
 	interface IState {
 		case_type: string | undefined;
-		client_name?: string;
+		clientName?: string;
 		case_name?: string;
 		opposing_party_name?: string;
 		jurisdictional_court?: string;
@@ -46,7 +46,7 @@
 
 	const formState = reactive<IState>({
 		case_type: undefined,
-		client_name: undefined,
+		clientName: undefined,
 		case_name: undefined,
 		opposing_party_name: '',
 		jurisdictional_court: '',
@@ -99,7 +99,7 @@
 
 				<template v-if="formState.case_type && +formState.case_type == 1">
 					<a-form-item label="客户名称">
-						<a-select v-model:value="formState.client_name" style="width: 180px" placeholder="请选择客户名称">
+						<a-select v-model:value="formState.clientName" style="width: 180px" placeholder="请选择客户名称">
 							<a-select-option value="九策">九策</a-select-option>
 							<a-select-option value="港投">港投</a-select-option>
 						</a-select>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-	import { ref, onMounted, onUnmounted } from 'vue';
+	import { ref, onMounted, onUnmounted, computed } from 'vue';
 	import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons-vue';
 	import { getCurrentDate } from '@/utils/util';
+	import useUserStore from '@/stores/userStore';
 
 	const props = defineProps<{
 		collapsed: boolean;
@@ -11,6 +12,9 @@
 		collapse: [];
 	}>();
 
+	const userName = computed(() => {
+		return useUserStore().userInfo?.userName;
+	});
 	// const currentTime = ref()
 	const handleCollapseClick = () => {
 		emit('collapse');
@@ -38,6 +42,7 @@
 				</div>
 				<div class="header-right">
 					<div class="header-right-date">{{ currentDate }}</div>
+					<div class="header-right-name">{{ userName }}</div>
 					<a-avatar src="/avatar.gif" />
 				</div>
 			</div>
@@ -56,6 +61,11 @@
 			display: flex;
 			align-items: center;
 			&-date {
+				margin-right: 16px;
+				font-family: AlibabaPuhuiSemiBold;
+				color: #1a1a1a;
+			}
+			&-name {
 				margin-right: 16px;
 				font-family: AlibabaPuhuiSemiBold;
 				color: #1a1a1a;
