@@ -13,9 +13,18 @@
 
 	const handleOpenAddModal = () => {
 		const modalInstance = modalRef.value;
-
+		action.value = 'add';
 		if (modalInstance) {
 			modalInstance.showModal();
+		}
+	};
+
+	const handleOpenEditModal = (record: any) => {
+		const modalInstance = modalRef.value;
+		action.value = 'edit';
+
+		if (modalInstance) {
+			modalInstance.showModal(record);
 		}
 	};
 </script>
@@ -24,7 +33,7 @@
 	<div class="index">
 		<SearchForm @addRecord="handleOpenAddModal" @search="search" />
 		<a-divider />
-		<Table :tableMethods="tableMethods" :tableProps="tableProps" />
+		<Table :tableMethods="tableMethods" :tableProps="tableProps" @edit="handleOpenEditModal" />
 		<Modal ref="modalRef" :action="action" :refreshTable="refreshTable" />
 	</div>
 </template>

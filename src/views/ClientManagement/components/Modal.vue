@@ -8,11 +8,12 @@
 	import dayjs, { type Dayjs } from 'dayjs';
 
 	interface IState {
+		clientId?: number | undefined;
 		clientName: string;
 		contractAmount: number | undefined;
-		paymentDate: string;
-		serviceEffectiveDate: string;
-		serviceExpirationDate: string;
+		paymentDate: Dayjs | undefined;
+		serviceEffectiveDate: Dayjs | undefined;
+		serviceExpirationDate: Dayjs | undefined;
 	}
 	// 服务类别
 	// 合同/文件审查
@@ -27,11 +28,12 @@
 	}>();
 
 	const formState = reactive<IState>({
+		clientId: undefined,
 		clientName: '',
 		contractAmount: undefined,
-		paymentDate: '',
-		serviceEffectiveDate: '',
-		serviceExpirationDate: '',
+		paymentDate: undefined,
+		serviceEffectiveDate: undefined,
+		serviceExpirationDate: undefined,
 	});
 	const rules: Record<string, Rule[]> = reactive({
 		clientName: [{ required: true, message: '请输入客户名称', trigger: 'blur' }],
@@ -51,6 +53,9 @@
 	const { run: addClient, loading } = useRequest(API.addClient, {
 		manual: true,
 	});
+	const { run: updateClient, loading: updateLoading } = useRequest(API.updateClient, {
+		manual: true,
+	});
 	const dateFormat = 'YYYY-MM-DD';
 
 	const {
@@ -59,30 +64,51 @@
 		close: closeModal,
 		submit: handleOk,
 	} = useModal({
+		onShow: (data) => {
+			// 处理数据回显示
+			if (data) {
+				const { clientId, clientName, contractAmount, paymentDate, serviceEffectiveDate, serviceExpirationDate } = data;
+
+				formState.clientId = clientId;
+				formState.clientName = clientName;
+				formState.contractAmount = contractAmount;
+				formState.paymentDate = dayjs(paymentDate, dateFormat) || '';
+				formState.serviceEffectiveDate = dayjs(serviceEffectiveDate, dateFormat) || '';
+				formState.serviceExpirationDate = dayjs(serviceExpirationDate, dateFormat) || '';
+			}
+		},
 		onClose: () => {
 			resetFields();
 		},
 		onSubmit: async () => {
 			try {
 				await validate();
+				const { paymentDate, serviceEffectiveDate, serviceExpirationDate } = formState;
+				const params = {
+					...formState,
+					paymentDate: dayjs(paymentDate).format(dateFormat) || '',
+					serviceEffectiveDate: dayjs(serviceEffectiveDate).format(dateFormat) || '',
+					serviceExpirationDate: dayjs(serviceExpirationDate).format(dateFormat) || '',
+				};
 				// 添加客户
 				if (props.action == 'add') {
-					const { paymentDate, serviceEffectiveDate, serviceExpirationDate } = formState;
-					const params = {
-						...formState,
-						paymentDate: dayjs(paymentDate).format(dateFormat) || '',
-						serviceEffectiveDate: dayjs(serviceEffectiveDate).format(dateFormat) || '',
-						serviceExpirationDate: dayjs(serviceExpirationDate).format(dateFormat) || '',
-					};
-					console.log(`params`, params);
 					const {
 						code,
 						data: { success },
 					} = await addClient(params);
-					console.log(`code`, code);
-					console.log(`success`, success);
+
 					if (code == 0 && success) {
 						message.success('添加成功');
+						closeModal();
+						props.refreshTable();
+					}
+				} else if (props.action === 'edit') {
+					const {
+						code,
+						data: { success },
+					} = await updateClient(params);
+					if (code == 0 && success) {
+						message.success('更新成功');
 						closeModal();
 						props.refreshTable();
 					}
@@ -96,13 +122,18 @@
 	defineExpose({
 		showModal,
 	});
-
-	onMounted(() => {});
 </script>
 
 <template>
 	<div class="modal">
-		<a-modal width="800px" :title="title" :open="open" :confirm-loading="loading" @ok="handleOk" @cancel="closeModal">
+		<a-modal
+			width="800px"
+			:title="title"
+			:open="open"
+			:confirm-loading="action === 'add' ? loading : updateLoading"
+			@ok="handleOk"
+			@cancel="closeModal"
+		>
 			<a-form :model="formState" :rules="rules" :labelCol="{ span: 4 }">
 				<a-form-item label="客户名称" v-bind="validateInfos.clientName">
 					<a-input v-model:value="formState.clientName" style="width: 180px" placeholder="请输入客户名称" />

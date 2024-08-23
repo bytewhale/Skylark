@@ -2,7 +2,7 @@
 	import { onMounted, ref } from 'vue';
 	import { formatDate } from '@/utils/util';
 
-	interface IDataItem {
+	export interface IDataItem {
 		clientId: number;
 		clientName: string;
 		contractAmount: number;
@@ -10,6 +10,10 @@
 		serviceEffectiveDate: string;
 		serviceExpirationDate: string;
 	}
+
+	const emit = defineEmits<{
+		edit: any;
+	}>();
 
 	const columns = [
 		{ title: '客户ID', dataIndex: 'clientId', key: 'clientId' },
@@ -24,6 +28,10 @@
 	const props = defineProps<{
 		tableProps: any;
 	}>();
+
+	const handleEdit = (record: IDataItem) => {
+		emit('edit', record);
+	};
 	onMounted(() => {});
 </script>
 
@@ -41,7 +49,7 @@
 					<div>{{ formatDate(record.serviceExpirationDate, true) }}</div>
 				</template>
 				<template v-if="column.key === 'edit'">
-					<a>编辑</a>
+					<a @click="handleEdit(record)">编辑</a>
 				</template>
 			</template>
 		</a-table>
