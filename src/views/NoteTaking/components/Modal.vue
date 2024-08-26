@@ -7,10 +7,10 @@
 	interface IState {
 		case_type: string | undefined;
 		clientName?: string;
-		case_name?: string;
-		opposing_party_name?: string;
-		jurisdictional_court?: string;
-		level_of_court?: string;
+		caseName?: string;
+		opposingPartyName?: string;
+		jurisdictionalCourt?: string;
+		levelOfCourt?: string;
 		judge?: string;
 		contact?: string;
 		case_status?: string;
@@ -47,10 +47,10 @@
 	const formState = reactive<IState>({
 		case_type: undefined,
 		clientName: undefined,
-		case_name: undefined,
-		opposing_party_name: '',
-		jurisdictional_court: '',
-		level_of_court: undefined,
+		caseName: undefined,
+		opposingPartyName: '',
+		jurisdictionalCourt: '',
+		levelOfCourt: undefined,
 		judge: '',
 		contact: '',
 		case_status: '',
@@ -105,16 +105,16 @@
 						</a-select>
 					</a-form-item>
 					<a-form-item label="案件名称">
-						<a-select v-model:value="formState.case_name" style="width: 180px" placeholder="请选择客户名称">
+						<a-select v-model:value="formState.caseName" style="width: 180px" placeholder="请选择客户名称">
 							<a-select-option value="香江">香江</a-select-option>
 							<a-select-option value="菁蓉城">菁蓉城</a-select-option>
 						</a-select>
 					</a-form-item>
 					<a-form-item label="对方当事人">
-						<a-input v-model:value="formState.opposing_party_name" style="width: 180px" placeholder="请输入对方当事人" />
+						<a-input v-model:value="formState.opposingPartyName" style="width: 180px" placeholder="请输入对方当事人" />
 					</a-form-item>
 					<a-form-item label="审级">
-						<a-select v-model:value="formState.level_of_court" style="width: 180px" placeholder="请选择审级">
+						<a-select v-model:value="formState.levelOfCourt" style="width: 180px" placeholder="请选择审级">
 							<a-select-option value="1">一审</a-select-option>
 							<a-select-option value="2">二审</a-select-option>
 							<a-select-option value="3">再审</a-select-option>

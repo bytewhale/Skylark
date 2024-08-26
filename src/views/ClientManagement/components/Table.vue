@@ -27,6 +27,7 @@
 
 	const props = defineProps<{
 		tableProps: any;
+		pageChange: any;
 	}>();
 
 	const handleEdit = (record: IDataItem) => {
@@ -37,7 +38,7 @@
 
 <template>
 	<div class="table">
-		<a-table v-bind="tableProps" :columns="columns" :rowKey="(record: any) => record.abNameId">
+		<a-table v-bind="tableProps" :columns="columns" @change="pageChange" :rowKey="(record: any) => record.clientId">
 			<template #bodyCell="{ column, record }">
 				<template v-if="column.key === 'paymentDate'">
 					<div>{{ formatDate(record.paymentDate, true) }}</div>

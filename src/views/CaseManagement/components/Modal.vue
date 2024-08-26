@@ -2,16 +2,19 @@
 	import { computed, onMounted, reactive, ref, type Ref } from 'vue';
 	import { useModal } from '@/composition/useModal';
 	import { useRequest } from '@/composition/useRequest';
-	import type { Rule } from 'ant-design-vue/es/form';
+	import { useForm, type Rule } from 'ant-design-vue/es/form';
+	import API from '@/api';
+	import { message } from 'ant-design-vue';
 
 	interface IState {
-		case_name: string;
-		opposing_party_name: string;
-		jurisdictional_court: string;
-		level_of_court: string;
+		caseId?: number | undefined;
+		caseName: string;
+		opposingPartyName: string;
+		jurisdictionalCourt: string;
+		levelOfCourt: string;
 		judge: string;
 		contact: string;
-		case_status?: string;
+		caseStatus?: string;
 		collaborator: string;
 	}
 
@@ -22,15 +25,9 @@
 	// 法律培训
 	// 草拟文件
 	//
-
-	const { open, show: showModal, close: closeModal, submit: handleOk } = useModal();
-
-	const { loading } = useRequest(() => Promise.resolve({ code: 0 }), {
-		manual: true,
-	});
-
 	const props = defineProps<{
 		action: string;
+		refreshTable: () => void;
 	}>();
 
 	const title = computed(() => {
@@ -38,30 +35,94 @@
 	});
 
 	const formState = reactive<IState>({
-		case_name: '',
-		opposing_party_name: '',
-		jurisdictional_court: '',
-		level_of_court: '',
+		caseId: undefined,
+		caseName: '',
+		opposingPartyName: '',
+		jurisdictionalCourt: '',
+		levelOfCourt: '',
 		judge: '',
 		contact: '',
 		collaborator: '',
 	});
 
-	const rulesRef: Record<string, Rule[]> = reactive({});
+	const rules: Record<string, Rule[]> = reactive({
+		caseName: [{ required: true, message: '请输入案件名称', trigger: 'blur' }],
+		opposingPartyName: [{ required: true, message: '请输入对方当事人', trigger: 'blur' }],
+		jurisdictionalCourt: [{ required: true, message: '请输入管辖法院', trigger: 'blur' }],
+		levelOfCourt: [{ required: true, message: '请选择审级', trigger: 'blur' }],
+		judge: [{ required: true, message: '请输入法官', trigger: 'blur' }],
+		contact: [{ required: true, message: '请输入法官联系方式', trigger: 'blur' }],
+	});
 
-	const formRef: Ref<any | null> = ref(null);
+	const { resetFields, validate, validateInfos } = useForm(formState, rules, {
+		deep: true,
+		immediate: true,
+	});
+	const { run: addClient, loading } = useRequest(API.addCase, {
+		manual: true,
+	});
+	const { run: updateClient, loading: updateLoading } = useRequest(API.updateCase, {
+		manual: true,
+	});
 
-	const handleConfirm = () => {
-		formRef.value
-			.validate()
-			.then(() => {
-				console.log(`validate ok`);
-				handleOk();
-			})
-			.catch(() => {
-				console.log(`validate error`);
-			});
-	};
+	const {
+		open,
+		show: showModal,
+		close: closeModal,
+		submit: handleOk,
+	} = useModal({
+		onShow: (data) => {
+			// 处理数据回显示
+			if (data) {
+				const { caseId, caseName, opposingPartyName, jurisdictionalCourt, levelOfCourt, judge, contact, collaborator } = data;
+
+				formState.caseId = caseId;
+				formState.caseName = caseName;
+				formState.opposingPartyName = opposingPartyName;
+				formState.jurisdictionalCourt = jurisdictionalCourt;
+				formState.levelOfCourt = levelOfCourt;
+				formState.judge = judge;
+				formState.contact = contact;
+				formState.collaborator = collaborator;
+			}
+		},
+		onClose: () => {
+			resetFields();
+		},
+		onSubmit: async () => {
+			try {
+				await validate();
+				const params = {
+					...formState,
+				};
+				// 添加客户
+				if (props.action == 'add') {
+					const {
+						code,
+						data: { success },
+					} = await addClient(params);
+
+					if (code == 0 && success) {
+						message.success('添加成功');
+						closeModal();
+						props.refreshTable();
+					}
+				} else if (props.action === 'edit') {
+					const {
+						code,
+						data: { success },
+					} = await updateClient(params);
+					if (code == 0 && success) {
+						message.success('更新成功');
+						closeModal();
+						props.refreshTable();
+					}
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		},
+	});
 
 	defineExpose({
 		showModal,
@@ -72,27 +133,34 @@
 
 <template>
 	<div class="modal">
-		<a-modal width="800px" :title="title" :open="open" :confirm-loading="loading" @ok="handleConfirm" @cancel="closeModal">
-			<a-form ref="formRef" :model="formState" :rules="rulesRef" :labelCol="{ span: 3 }">
-				<a-form-item label="案件名称">
-					<a-input v-model:value="formState.case_name" style="width: 180px" placeholder="请输入案件名称" />
+		<a-modal
+			width="800px"
+			:title="title"
+			:open="open"
+			:confirm-loading="action === 'add' ? loading : updateLoading"
+			@ok="handleOk"
+			@cancel="closeModal"
+		>
+			<a-form :model="formState" :rules="rules" :labelCol="{ span: 3 }">
+				<a-form-item label="案件名称" v-bind="validateInfos.caseName">
+					<a-input v-model:value="formState.caseName" style="width: 180px" placeholder="请输入案件名称" />
 				</a-form-item>
-				<a-form-item label="对方当事人">
-					<a-input v-model:value="formState.opposing_party_name" style="width: 180px" placeholder="请输入对方当事人" />
+				<a-form-item label="对方当事人" v-bind="validateInfos.opposingPartyName">
+					<a-input v-model:value="formState.opposingPartyName" style="width: 180px" placeholder="请输入对方当事人" />
 				</a-form-item>
-				<a-form-item label="管辖法院">
-					<a-input v-model:value="formState.jurisdictional_court" style="width: 180px" placeholder="请输入管辖法院" />
+				<a-form-item label="管辖法院" v-bind="validateInfos.jurisdictionalCourt">
+					<a-input v-model:value="formState.jurisdictionalCourt" style="width: 180px" placeholder="请输入管辖法院" />
 				</a-form-item>
-				<a-form-item label="审级">
-					<a-input v-model:value="formState.level_of_court" style="width: 180px" placeholder="请输入审级" />
+				<a-form-item label="审级" v-bind="validateInfos.levelOfCourt">
+					<a-input v-model:value="formState.levelOfCourt" style="width: 180px" placeholder="请输入审级" />
 				</a-form-item>
-				<a-form-item label="法官">
+				<a-form-item label="法官" v-bind="validateInfos.judge">
 					<a-input v-model:value="formState.judge" style="width: 180px" placeholder="请输入法官姓名" />
 				</a-form-item>
-				<a-form-item label="联系方式">
+				<a-form-item label="联系方式" v-bind="validateInfos.contact">
 					<a-input v-model:value="formState.contact" style="width: 180px" placeholder="请输入联系方式" />
 				</a-form-item>
-				<a-form-item label="协作人">
+				<a-form-item label="协作人" v-bind="validateInfos.collaborator">
 					<a-input v-model:value="formState.collaborator" style="width: 180px" placeholder="请输入案件协作人" />
 				</a-form-item>
 			</a-form>

@@ -7,11 +7,11 @@
 		case_type: number;
 		clientName: string;
 		update_time: string;
-		case_id: number;
-		case_name: string;
-		opposing_party_name: string;
-		jurisdictional_court: string;
-		level_of_court: string;
+		caseId: number;
+		caseName: string;
+		opposingPartyName: string;
+		jurisdictionalCourt: string;
+		levelOfCourt: string;
 		judge: string;
 		contact: string;
 		case_status: string;
@@ -33,11 +33,11 @@
 
 	// 诉讼业务表头
 	const litigationColumns = [
-		{ title: '案件ID', dataIndex: 'case_id', key: 'case_id' },
-		{ title: '案件名称', dataIndex: 'case_name', key: 'case_name' },
-		{ title: '对方当事人', dataIndex: 'opposing_party_name', key: 'opposing_party_name' },
-		{ title: '管辖法院', dataIndex: 'jurisdictional_court', key: 'jurisdictional_court' },
-		{ title: '审级', dataIndex: 'level_of_court', key: 'level_of_court' },
+		{ title: '案件ID', dataIndex: 'caseId', key: 'caseId' },
+		{ title: '案件名称', dataIndex: 'caseName', key: 'caseName' },
+		{ title: '对方当事人', dataIndex: 'opposingPartyName', key: 'opposingPartyName' },
+		{ title: '管辖法院', dataIndex: 'jurisdictionalCourt', key: 'jurisdictionalCourt' },
+		{ title: '审级', dataIndex: 'levelOfCourt', key: 'levelOfCourt' },
 		{ title: '法官', dataIndex: 'judge', key: 'judge' },
 		{ title: '联系方式', dataIndex: 'contact', key: 'contact' },
 		{ title: '案件进度', dataIndex: 'case_status', key: 'case_status' },
@@ -63,11 +63,11 @@
 					case_type: 1,
 					clientName: '九策',
 					update_time: `2014-12-24 23:12:00`,
-					case_id: i + 1,
-					case_name: '香江',
-					opposing_party_name: '张三',
-					jurisdictional_court: '武侯区中级人民法院',
-					level_of_court: '一审',
+					caseId: i + 1,
+					caseName: '香江',
+					opposingPartyName: '张三',
+					jurisdictionalCourt: '武侯区中级人民法院',
+					levelOfCourt: '一审',
 					judge: '李思维',
 					contact: '17389489390',
 					case_status: '一审',
@@ -84,11 +84,11 @@
 					case_type: 2,
 					clientName: '港航投资',
 					update_time: `2014-12-24 23:12:00`,
-					case_id: 0,
-					case_name: '',
-					opposing_party_name: '',
-					jurisdictional_court: '',
-					level_of_court: '',
+					caseId: 0,
+					caseName: '',
+					opposingPartyName: '',
+					jurisdictionalCourt: '',
+					levelOfCourt: '',
 					judge: '',
 					contact: '',
 					case_status: '',
