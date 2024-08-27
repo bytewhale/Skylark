@@ -12,9 +12,6 @@ const axiosInstance: AxiosInstance = axios.create({
 // 请求拦截器
 axiosInstance.interceptors.request.use(
   (config) => {
-
-
-    useAppStore().incrementCount();
     // 在请求发送前做一些处理，例如添加认证 token
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -23,8 +20,6 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-
-    useAppStore().decrementCount();
     // 处理请求错误
     return Promise.reject(error);
   }
@@ -33,8 +28,6 @@ axiosInstance.interceptors.request.use(
 // 响应拦截器
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-
-    useAppStore().decrementCount();
     // 对响应数据做点什么，例如解包数据或统一处理错误码
     if (response.data.code !== 0) {
 
@@ -53,8 +46,6 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   (error) => {
-
-    useAppStore().decrementCount();
     // 处理响应错误
     if (error.response) {
       // 服务器返回了一个非 2xx 的响应

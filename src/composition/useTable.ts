@@ -91,6 +91,7 @@ export function useTable<T>(requestFn: (params: any) => Promise<T>, options: Opt
   };
 
   const search = (data: Record<string, any>) => {
+    console.log(`search data`, data);
     page.page = 1;
     Object.assign(searchParams, data);
     refresh();

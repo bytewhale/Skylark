@@ -5,7 +5,7 @@
 	const formRef = ref();
 
 	const formState = reactive({
-		caseId: '',
+		caseId: undefined,
 		caseName: undefined,
 	});
 

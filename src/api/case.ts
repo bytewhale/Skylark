@@ -10,5 +10,7 @@ export default {
   getCaseList: (params: any) => {
     return http.post('/case/getCaseList', params);
   },
-
+  getCasesByClientId: (params: any) => {
+    return http.post('/case/getCasesByClientId', params);
+  },
 }

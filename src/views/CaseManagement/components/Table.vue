@@ -4,6 +4,8 @@
 	import { type Dayjs } from 'dayjs';
 
 	interface IDataItem {
+		clientId: number;
+		clientName: string;
 		caseId: number;
 		caseName: string;
 		opposingPartyName: string;
@@ -20,6 +22,8 @@
 	}>();
 
 	const columns = [
+		{ title: '客户ID', dataIndex: 'clientId', key: 'clientId' },
+		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
 		{ title: '案件ID', dataIndex: 'caseId', key: 'caseId' },
 		{ title: '案件名称', dataIndex: 'caseName', key: 'caseName' },
 		{ title: '对方当事人', dataIndex: 'opposingPartyName', key: 'opposingPartyName' },
@@ -28,7 +32,7 @@
 		{ title: '法官', dataIndex: 'judge', key: 'judge' },
 		{ title: '联系方式', dataIndex: 'contact', key: 'contact' },
 		{ title: '协作人', dataIndex: 'collaborator', key: 'collaborator' },
-		{ title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
+		// { title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
 		{ title: '更新时间', dataIndex: 'update_time', key: 'update_time' },
 		{ title: '操作', key: 'edit' },
 	];

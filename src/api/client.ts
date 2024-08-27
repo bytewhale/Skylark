@@ -10,5 +10,10 @@ export default {
   getClientList: (params: any) => {
     return http.post('/client/getClientList', params);
   },
-
+  getClientDetail: (params: any) => {
+    return http.post('/client/getClientDetail', params);
+  },
+  getClientConfigList: (params: any) => {
+    return http.get('/client/getClientConfigList', params);
+  },
 }

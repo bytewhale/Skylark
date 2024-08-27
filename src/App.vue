@@ -1,7 +1,8 @@
 <script setup lang="ts">
 	import { RouterView } from 'vue-router';
 	import API from '@/api';
-	import { nextTick, onMounted } from 'vue';
+	import { onMounted } from 'vue';
+	import useAppStore from '@/stores/appStore';
 	import useUserStore from '@/stores/userStore';
 	import zhCN from 'ant-design-vue/es/locale/zh_CN';
 	import * as dayjs from 'dayjs';
@@ -9,13 +10,22 @@
 
 	dayjs.locale('zh-cn'); // use locale
 
+	const init = async () => {
+		const { data }: { data: IUserInfo } = await API.getUserInfo({ uid: 10001 });
+		const {
+			data: { list },
+		}: { data: { list: ISelectOption[] } } = await API.getClientConfigList({});
+
+		useUserStore().setUserInfo(data);
+		useAppStore().setClientSelectOptions(list);
+	};
+
 	onMounted(async () => {
 		try {
-			const { data }: { data: IUserInfo } = await API.getUserInfo({ uid: 10001 });
-			console.log(`userInfo => `, data);
-
-			useUserStore().setUserInfo(data);
-		} catch (error) {}
+			init();
+		} catch (error) {
+			console.log(`error`, error);
+		}
 	});
 </script>
 

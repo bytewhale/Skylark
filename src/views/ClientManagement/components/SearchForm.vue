@@ -3,13 +3,16 @@
 	import { SearchOutlined, PlusOutlined } from '@ant-design/icons-vue';
 
 	const formRef = ref();
+
 	const formState = reactive({
-		clientId: '',
+		clientId: undefined,
 		clientName: undefined,
 	});
 
 	const rules = {};
+
 	const labelCol = { style: { width: '80px' } };
+
 	const emit = defineEmits<{
 		search: any;
 		addRecord: any;
