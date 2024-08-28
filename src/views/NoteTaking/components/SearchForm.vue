@@ -1,8 +1,10 @@
 <script setup lang="ts">
 	import { reactive, ref } from 'vue';
-	import { SearchOutlined, PlusOutlined } from '@ant-design/icons-vue';
+	import { SearchOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 	import dayjs, { type Dayjs } from 'dayjs';
 	import appStore from '@/stores/appStore';
+	import API from '@/api';
+	import { message } from 'ant-design-vue';
 
 	const formRef = ref();
 	const useAppStore = appStore();
@@ -21,6 +23,7 @@
 
 	const emit = defineEmits<{
 		search: any;
+		download: any;
 		addRecord: any;
 	}>();
 
@@ -34,6 +37,28 @@
 			createTimeRange: formState.createTimeRange.length ? [dayjs(startTime).format(dateFormat), dayjs(endTime).format(dateFormat)] : [],
 		});
 	}
+	const handleExport = async () => {
+		try {
+			if (!formState.caseType) {
+				message.warning('请选择案件类型');
+				return;
+			}
+			if (!formState.createTimeRange.length) {
+				message.warning('请选择时间范围');
+				return;
+			}
+			const [startTime, endTime] = formState.createTimeRange;
+
+			const params = {
+				recordId: formState.recordId,
+				caseType: formState.caseType,
+				clientName: formState.clientName,
+				createTimeRange: [dayjs(startTime).format(dateFormat), dayjs(endTime).format(dateFormat)],
+			};
+
+			await API.exportRecordListToExcel(params);
+		} catch (error) {}
+	};
 </script>
 
 <template>
@@ -46,6 +71,7 @@
 				<a-space>
 					<a-button type="primary" @click="handleSearch"><SearchOutlined />搜索</a-button>
 					<a-button type="primary" @click="$emit('addRecord')"><PlusOutlined />新增记录</a-button>
+					<a-button type="primary" @click="handleExport"><DownloadOutlined />导出记录</a-button>
 				</a-space>
 			</a-flex>
 			<a-flex gap="middle" align="start" horizontal>

@@ -9,7 +9,7 @@
 
 	const modalRef: Ref<InstanceType<typeof Modal> | null> = ref(null);
 	const action = ref('add');
-	const { tableProps, search, pageChange, refresh: refreshTable } = useTable(API.getRecordList);
+	const { tableProps, search, download, pageChange, refresh: refreshTable } = useTable(API.getRecordList);
 
 	const handleOpenAddModal = () => {
 		const modalInstance = modalRef.value;
@@ -31,7 +31,7 @@
 
 <template>
 	<div class="index">
-		<SearchForm @addRecord="handleOpenAddModal" @search="search" />
+		<SearchForm @addRecord="handleOpenAddModal" @search="search" @download="download" />
 		<a-divider />
 		<Table :tableProps="tableProps" :pageChange="pageChange" @edit="handleOpenEditModal" />
 		<Modal ref="modalRef" :action="action" :refreshTable="refreshTable" />

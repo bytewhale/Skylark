@@ -10,5 +10,7 @@ export default {
   getRecordList: (params: any) => {
     return http.post('/record/getRecordList', params);
   },
-
+  exportRecordListToExcel: (params: any) => {
+    return http.download('/record/exportRecordListToExcel', params);
+  },
 }

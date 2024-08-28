@@ -64,12 +64,33 @@ axiosInstance.interceptors.response.use(
 
 // 导出封装的请求方法
 export const http = {
-  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return axiosInstance.get(url, config).then(res => res.data);
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return axiosInstance.get(url, config).then(res => res);
   },
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return axiosInstance.post(url, data, config).then(res => res.data);
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+    return axiosInstance.post(url, data, config).then(res => res);
   },
+  download<T = any>(url: string, data?: any, fileName = '工作日志'): Promise<AxiosResponse> {
+    return axiosInstance.post(url, data, { responseType: 'blob' }).then((res: any) => {
+      if (res) {
+        try {
+          // 直接使用 Blob
+          const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
+          const downloadElement = document.createElement('a');
+          document.body.appendChild(downloadElement);
+          const objectUrl = URL.createObjectURL(blob);
+          downloadElement.href = objectUrl;
+          downloadElement.download = fileName + '.xlsx';
+          downloadElement.click();
+          document.body.removeChild(downloadElement);
+          URL.revokeObjectURL(objectUrl);
+        } catch (error) {
+          console.log(`error`, error)
+        }
+      }
+      return res;
+    });
+  }
 };
 
-export default axiosInstance;
+export default http;
