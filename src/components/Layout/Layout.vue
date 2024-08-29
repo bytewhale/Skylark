@@ -3,9 +3,9 @@
 	import { useRoute } from 'vue-router';
 	import Sider from './Sider.vue';
 	import Header from './Header.vue';
-	import appStore from '@/stores/appStore';
+	// import { useAppStore } from '@/stores/appStore';
 
-	const useAppStore = appStore();
+	// const appStore = useAppStore();
 
 	const collapsed = ref(true);
 
@@ -19,7 +19,7 @@
 		return route.meta.keepAlive;
 	});
 
-	const spinning = computed(() => Boolean(useAppStore.loadingCount));
+	// const spinning = computed(() => Boolean(appStore.loadingCount));
 </script>
 
 <template>
@@ -28,14 +28,14 @@
 		<Header :collapsed="collapsed" @collapse="handleCollapse">
 			<!-- 内容区 -->
 			<a-layout class="content" style="padding: 24px 24px 24px">
-				<a-spin :spinning="spinning" size="large">
-					<router-view v-slot="{ Component }">
-						<keep-alive>
-							<component :is="Component" v-if="keepAlive" />
-						</keep-alive>
-						<component :is="Component" v-if="!keepAlive" />
-					</router-view>
-				</a-spin>
+				<!-- <a-spin :spinning="spinning" size="large"> -->
+				<router-view v-slot="{ Component }">
+					<keep-alive>
+						<component :is="Component" v-if="keepAlive" />
+					</keep-alive>
+					<component :is="Component" v-if="!keepAlive" />
+				</router-view>
+				<!-- </a-spin> -->
 			</a-layout>
 			<!-- 内容区结束 -->
 		</Header>

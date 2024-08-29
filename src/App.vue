@@ -2,27 +2,25 @@
 	import { RouterView } from 'vue-router';
 	import API from '@/api';
 	import { onMounted } from 'vue';
-	import useAppStore from '@/stores/appStore';
-	import useUserStore from '@/stores/userStore';
+	import { useAppStore } from '@/stores/appStore';
 	import zhCN from 'ant-design-vue/es/locale/zh_CN';
 	import * as dayjs from 'dayjs';
+	import { useAuthStore } from '@/stores/authStore';
 	import 'dayjs/locale/zh-cn'; // import locale
 
 	dayjs.locale('zh-cn'); // use locale
 
 	const init = async () => {
-		const { data }: { data: IUserInfo } = await API.getUserInfo({ uid: 10001 });
-		const {
-			data: { list },
-		}: { data: { list: ISelectOption[] } } = await API.getClientConfigList({});
+		const { list }: { list: ISelectOption[] } = await API.getClientConfigList({});
 
-		useUserStore().setUserInfo(data);
 		useAppStore().setClientSelectOptions(list);
 	};
 
 	onMounted(async () => {
 		try {
-			init();
+			if (useAuthStore().hasLogin) {
+				init();
+			}
 		} catch (error) {
 			console.log(`error`, error);
 		}

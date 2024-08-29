@@ -65,8 +65,8 @@ export function useTable<T>(requestFn: (params: any) => Promise<T>, options: Opt
       if (options.onSuccess) {
         options.onSuccess(response);
       } else {
-        total.value = response.data[pagination.totalKey];
-        list.value = response.data[pagination.listKey];
+        total.value = response[pagination.totalKey];
+        list.value = response[pagination.listKey];
         options.formatResult?.();
       }
     },

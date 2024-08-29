@@ -5,8 +5,7 @@
 	import { useForm, type Rule } from 'ant-design-vue/es/form';
 	import API from '@/api';
 	import { message } from 'ant-design-vue';
-	import appStore from '@/stores/appStore';
-	import dayjs, { type Dayjs } from 'dayjs';
+	import { useAppStore } from '@/stores/appStore';
 
 	interface IState {
 		recordId?: number | undefined;
@@ -33,7 +32,7 @@
 		refreshTable: () => void;
 	}>();
 
-	const useAppStore = appStore();
+	const appStore = useAppStore();
 	const title = computed(() => {
 		return props.action == 'add' ? '新增记录' : '编辑记录';
 	});
@@ -189,22 +188,17 @@
 				console.log(`params`, params);
 				// 添加记录
 				if (props.action == 'add') {
-					const {
-						code,
-						data: { success },
-					} = await addRecord(params);
+					const { success } = await addRecord(params);
 
-					if (code == 0 && success) {
+					if (success) {
 						message.success('添加成功');
 						closeModal();
 						props.refreshTable();
 					}
 				} else if (props.action === 'edit') {
-					const {
-						code,
-						data: { success },
-					} = await updateRecord(params);
-					if (code == 0 && success) {
+					const { success } = await updateRecord(params);
+
+					if (success) {
 						message.success('更新成功');
 						closeModal();
 						props.refreshTable();
@@ -218,17 +212,13 @@
 
 	const handleSelectClient = async (clientId: number) => {
 		try {
-			const {
-				data: { clientName },
-			} = await API.getClientDetail({ clientId });
+			const { clientName } = await API.getClientDetail({ clientId });
 
 			formState.clientName = clientName;
 
 			if (formState.caseType == 2) return;
 			formState.caseId = undefined; // 重新选择客户时，重置案件信息表单禁用
-			const {
-				data: { list },
-			} = await getCaseListByClientId({ clientId });
+			const { list } = await getCaseListByClientId({ clientId });
 
 			caseListOptions.value = list;
 		} catch (error) {
@@ -292,7 +282,7 @@
 				<template v-if="formState.caseType && +formState.caseType == 1">
 					<a-form-item label="客户名称" v-bind="validateInfos.clientId">
 						<a-select v-model:value="formState.clientId" style="width: 180px" placeholder="请选择客户名称" @change="handleSelectClient">
-							<a-select-option :value="item.value" v-for="item in useAppStore.clientSelectOptions">{{ item.text }}</a-select-option>
+							<a-select-option :value="item.value" v-for="item in appStore.clientSelectOptions">{{ item.text }}</a-select-option>
 						</a-select>
 					</a-form-item>
 					<a-form-item label="案件名称" v-bind="validateInfos.caseName">
@@ -333,7 +323,7 @@
 				<template v-else-if="formState.caseType && +formState.caseType == 2">
 					<a-form-item label="客户名称" v-bind="validateInfos.clientId">
 						<a-select v-model:value="formState.clientId" style="width: 180px" placeholder="请选择客户名称" @change="handleSelectClient">
-							<a-select-option :value="item.value" v-for="item in useAppStore.clientSelectOptions">{{ item.text }}</a-select-option>
+							<a-select-option :value="item.value" v-for="item in appStore.clientSelectOptions">{{ item.text }}</a-select-option>
 						</a-select>
 					</a-form-item>
 					<a-form-item label="服务类别" v-bind="validateInfos.serviceCategory">

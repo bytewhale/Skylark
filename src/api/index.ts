@@ -4,10 +4,12 @@ import clientAPI from "./client";
 import caseAPI from "./case";
 import recordAPI from "./record";
 
-export default {
+const API = {
   ...authAPI,
   ...userAPI,
   ...clientAPI,
   ...caseAPI,
   ...recordAPI
 }
+
+export default API

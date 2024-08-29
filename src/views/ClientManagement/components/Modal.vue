@@ -86,22 +86,17 @@
 				};
 				// 添加客户
 				if (props.action == 'add') {
-					const {
-						code,
-						data: { success },
-					} = await addClient(params);
+					const { success } = await addClient(params);
 
-					if (code == 0 && success) {
+					if (success) {
 						message.success('添加成功');
 						closeModal();
 						props.refreshTable();
 					}
 				} else if (props.action === 'edit') {
-					const {
-						code,
-						data: { success },
-					} = await updateClient(params);
-					if (code == 0 && success) {
+					const { success } = await updateClient(params);
+
+					if (success) {
 						message.success('更新成功');
 						closeModal();
 						props.refreshTable();

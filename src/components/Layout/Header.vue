@@ -2,7 +2,7 @@
 	import { ref, onMounted, onUnmounted, computed } from 'vue';
 	import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons-vue';
 	import { getCurrentDate } from '@/utils/util';
-	import useUserStore from '@/stores/userStore';
+	import { useUserStore } from '@/stores/userStore';
 
 	const props = defineProps<{
 		collapsed: boolean;

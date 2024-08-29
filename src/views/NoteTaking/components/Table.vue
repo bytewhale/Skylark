@@ -25,7 +25,7 @@
 
 	const columns = [
 		{ title: 'ID', dataIndex: 'recordId', key: 'recordId' },
-		{ title: '诉讼类型', dataIndex: 'caseType', key: 'caseType' },
+		{ title: '案件类型', dataIndex: 'caseType', key: 'caseType' },
 		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
 		{ title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
 		{ title: '更新日期', dataIndex: 'update_time', key: 'update_time' },

@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
-import useAppStore from '@/stores/appStore';
+import { useAuthStore } from '@/stores/authStore';
 import { message } from 'ant-design-vue';
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({
@@ -29,19 +29,24 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     // 对响应数据做点什么，例如解包数据或统一处理错误码
-    if (response.data.code !== 0) {
+    const { code, message: msg, action } = response.data;
 
-      const { data: { code, message: msg, action } } = response;
-
+    if (code !== 0) {
       if (action === 'toast' && code != 0 && msg) {
         message.error(msg);
       }
 
-      if (code == 100001 || code == 100007 || code == 100008) {
-        const userStoreInstance = useAppStore();
-
-        userStoreInstance.logout()
+      const authStore = useAuthStore();
+      // 未登录或 Token 不正确
+      if (code == 100001 || code == 100008) {
+        authStore.handleLogin()
       }
+      // Token 过期，需刷新 Token
+      if (code == 100007) {
+        authStore.handleRefreshToken()
+      }
+
+      return Promise.reject(response.data)
     }
     return response.data;
   },
@@ -64,13 +69,13 @@ axiosInstance.interceptors.response.use(
 
 // 导出封装的请求方法
 export const http = {
-  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return axiosInstance.get(url, config).then(res => res);
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return axiosInstance.get(url, config).then(res => res.data);
   },
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return axiosInstance.post(url, data, config).then(res => res);
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return axiosInstance.post(url, data, config).then(res => res.data);
   },
-  download<T = any>(url: string, data?: any, fileName = '工作日志'): Promise<AxiosResponse> {
+  download<T = any>(url: string, data?: any, fileName = '工作日志'): Promise<T> {
     return axiosInstance.post(url, data, { responseType: 'blob' }).then((res: any) => {
       if (res) {
         try {

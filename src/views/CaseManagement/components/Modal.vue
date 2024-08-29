@@ -5,7 +5,7 @@
 	import { useForm, type Rule } from 'ant-design-vue/es/form';
 	import API from '@/api';
 	import { message } from 'ant-design-vue';
-	import appStore from '@/stores/appStore';
+	import { useAppStore } from '@/stores/appStore';
 
 	interface IState {
 		clientId?: number | undefined;
@@ -32,7 +32,7 @@
 		action: string;
 		refreshTable: () => void;
 	}>();
-	const useAppStore = appStore();
+	const appStore = useAppStore();
 	const title = computed(() => {
 		return props.action == 'add' ? '新增案件' : '编辑案件';
 	});
@@ -64,10 +64,10 @@
 		deep: true,
 		immediate: true,
 	});
-	const { run: addClient, loading } = useRequest(API.addCase, {
+	const { run: addCase, loading } = useRequest(API.addCase, {
 		manual: true,
 	});
-	const { run: updateClient, loading: updateLoading } = useRequest(API.updateCase, {
+	const { run: updateCase, loading: updateLoading } = useRequest(API.updateCase, {
 		manual: true,
 	});
 
@@ -106,29 +106,24 @@
 				// 添加客户
 				if (props.action == 'add') {
 					// 找到客户名称
-					const [clientNameItem] = useAppStore.clientSelectOptions.filter((item) => {
+					const [clientNameItem] = appStore.clientSelectOptions.filter((item: ISelectOption) => {
 						return item.value == formState.clientId;
 					});
 
 					if (clientNameItem) {
 						params.clientName = clientNameItem.text;
 					}
-					const {
-						code,
-						data: { success },
-					} = await addClient(params);
+					const { success } = await addCase(params);
 
-					if (code == 0 && success) {
+					if (success) {
 						message.success('添加成功');
 						closeModal();
 						props.refreshTable();
 					}
 				} else if (props.action === 'edit') {
-					const {
-						code,
-						data: { success },
-					} = await updateClient(params);
-					if (code == 0 && success) {
+					const { success } = await updateCase(params);
+
+					if (success) {
 						message.success('更新成功');
 						closeModal();
 						props.refreshTable();
@@ -160,7 +155,7 @@
 			<a-form :model="formState" :rules="rules" :labelCol="{ span: 3 }">
 				<a-form-item label="客户名称" v-bind="validateInfos.caseName">
 					<a-select v-model:value="formState.clientId" style="width: 180px" placeholder="请选择客户名称">
-						<a-select-option :value="item.value" v-for="item in useAppStore.clientSelectOptions">{{ item.text }}</a-select-option>
+						<a-select-option :value="item.value" v-for="item in appStore.clientSelectOptions">{{ item.text }}</a-select-option>
 					</a-select>
 				</a-form-item>
 				<a-form-item label="案件名称" v-bind="validateInfos.caseName">

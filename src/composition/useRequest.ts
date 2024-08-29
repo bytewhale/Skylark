@@ -53,6 +53,7 @@ export function useRequest<T = any, P = any>(
 
     try {
       const res = await requestFn({ ...params });
+
       data.value = mergedOptions.formatResult ? mergedOptions.formatResult(res) : res;
       if (mergedOptions.onSuccess) {
         mergedOptions.onSuccess(data.value as T, params);

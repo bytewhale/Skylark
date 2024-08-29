@@ -2,12 +2,12 @@
 	import { reactive, ref } from 'vue';
 	import { SearchOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 	import dayjs, { type Dayjs } from 'dayjs';
-	import appStore from '@/stores/appStore';
+	import { useAppStore } from '@/stores/appStore';
 	import API from '@/api';
 	import { message } from 'ant-design-vue';
 
 	const formRef = ref();
-	const useAppStore = appStore();
+	const appStore = useAppStore();
 	const formState = reactive({
 		recordId: undefined,
 		caseType: undefined,
@@ -88,7 +88,7 @@
 
 				<a-form-item label="客户名称" name="clientName">
 					<a-select v-model:value="formState.clientName" style="width: 180px" placeholder="请选择客户名称">
-						<a-select-option :value="item.text" v-for="item in useAppStore.clientSelectOptions">{{ item.text }}</a-select-option>
+						<a-select-option :value="item.text" v-for="item in appStore.clientSelectOptions">{{ item.text }}</a-select-option>
 					</a-select>
 				</a-form-item>
 			</a-flex>
