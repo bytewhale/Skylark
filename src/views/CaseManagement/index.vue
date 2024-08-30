@@ -13,6 +13,7 @@
 
 	const handleOpenAddModal = () => {
 		const modalInstance = modalRef.value;
+		action.value = 'add';
 
 		if (modalInstance) {
 			modalInstance.showModal();

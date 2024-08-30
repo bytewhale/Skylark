@@ -31,6 +31,17 @@ export const useAuthStore = defineStore('authStore', () => {
     }, 2500);
   }
 
+  const handleLogout = () => {
+    setAccessToken('');
+    useUserStore().setUid(0);
+    message.success('已退出登录', 1500);
+
+    const timer = setTimeout(() => {
+      window.location.href = `${window.location.origin}/login`;
+      clearTimeout(timer);
+    }, 1500);
+  }
+
   const handleRefreshToken = async () => {
     try {
 
@@ -75,6 +86,7 @@ export const useAuthStore = defineStore('authStore', () => {
     hasLogin,
     setAccessToken,
     handleLogin,
+    handleLogout,
     handleRefreshToken,
     login
   }

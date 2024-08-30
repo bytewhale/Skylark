@@ -136,6 +136,7 @@
 		onShow: async (data) => {
 			// 处理数据回显示
 			if (data) {
+				console.log(`data`, data);
 				const { clientId, clientName, recordId, caseType, remarks } = data;
 
 				formState.recordId = recordId;
@@ -143,7 +144,7 @@
 				formState.remarks = remarks;
 				formState.clientId = clientId;
 				formState.clientName = clientName;
-				await handleSelectClient(clientId);
+
 				if (caseType == 1) {
 					const { caseName, caseId, opposingPartyName, jurisdictionalCourt, levelOfCourt, judge, contact, collaborator } = data;
 
@@ -155,6 +156,7 @@
 					formState.judge = judge;
 					formState.contact = contact;
 					formState.collaborator = collaborator;
+					await getCaseList(clientId);
 					handleSelectCase(caseId);
 				} else if (caseType == 2) {
 					const { serviceCategory, serviceContent, count, liaison } = data;
@@ -210,17 +212,25 @@
 		},
 	});
 
-	const handleSelectClient = async (clientId: number) => {
+	const getCaseList = async (clientId: number) => {
 		try {
-			const { clientName } = await API.getClientDetail({ clientId });
-
-			formState.clientName = clientName;
-
-			if (formState.caseType == 2) return;
-			formState.caseId = undefined; // 重新选择客户时，重置案件信息表单禁用
 			const { list } = await getCaseListByClientId({ clientId });
 
 			caseListOptions.value = list;
+		} catch (e) {
+			console.log(`e`, e);
+		}
+	};
+
+	const handleSelectClient = async (clientId: number) => {
+		try {
+			// 重新选择客户时，重置案件信息表单禁用
+			if (formState.caseType == 1) {
+				handleResetCaseForm();
+				await getCaseList(clientId);
+			} else {
+				handleResetNonCaseForm();
+			}
 		} catch (error) {
 			console.log(`error`, error);
 		}
@@ -248,6 +258,26 @@
 		} catch (error) {
 			console.log(`error`, error);
 		}
+	};
+
+	const handleResetCaseForm = () => {
+		formState.caseName = '';
+		formState.caseId = undefined;
+		formState.opposingPartyName = '';
+		formState.jurisdictionalCourt = '';
+		formState.levelOfCourt = undefined;
+		formState.judge = '';
+		formState.contact = '';
+		formState.collaborator = '';
+		formState.remarks = '';
+	};
+
+	const handleResetNonCaseForm = () => {
+		formState.serviceCategory = undefined;
+		formState.serviceContent = '';
+		formState.count = undefined;
+		formState.liaison = '';
+		formState.remarks = '';
 	};
 
 	const caseInfoDisabled = computed(() => {

@@ -22,9 +22,9 @@
 	}>();
 
 	const columns = [
-		{ title: '客户ID', dataIndex: 'clientId', key: 'clientId' },
-		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
+		// { title: '客户ID', dataIndex: 'clientId', key: 'clientId' },
 		{ title: '案件ID', dataIndex: 'caseId', key: 'caseId' },
+		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
 		{ title: '案件名称', dataIndex: 'caseName', key: 'caseName' },
 		{ title: '对方当事人', dataIndex: 'opposingPartyName', key: 'opposingPartyName' },
 		{ title: '管辖法院', dataIndex: 'jurisdictionalCourt', key: 'jurisdictionalCourt' },

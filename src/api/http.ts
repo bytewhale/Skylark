@@ -31,8 +31,8 @@ axiosInstance.interceptors.response.use(
     // 对响应数据做点什么，例如解包数据或统一处理错误码
     const { code, message: msg, action } = response.data;
 
-    if (code !== 0) {
-      if (action === 'toast' && code != 0 && msg) {
+    if (code && code !== 0) {
+      if (action === 'toast' && msg) {
         message.error(msg);
       }
 
@@ -78,6 +78,10 @@ export const http = {
   download<T = any>(url: string, data?: any, fileName = '工作日志'): Promise<T> {
     return axiosInstance.post(url, data, { responseType: 'blob' }).then((res: any) => {
       if (res) {
+        if (res.size < 200) {
+          message.error("没有查询到相关记录")
+          return res
+        }
         try {
           // 直接使用 Blob
           const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
@@ -94,6 +98,8 @@ export const http = {
         }
       }
       return res;
+    }).catch(e => {
+      console.log(`download e`, e);
     });
   }
 };

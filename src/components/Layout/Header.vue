@@ -2,6 +2,7 @@
 	import { ref, onMounted, onUnmounted, computed } from 'vue';
 	import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons-vue';
 	import { getCurrentDate } from '@/utils/util';
+	import { useAuthStore } from '@/stores/authStore';
 	import { useUserStore } from '@/stores/userStore';
 
 	const props = defineProps<{
@@ -23,6 +24,10 @@
 	const currentDate = ref('');
 	const interval = ref<number>(0);
 
+	const handleLogout = () => {
+		useAuthStore().handleLogout();
+	};
+
 	onMounted(() => {
 		setInterval(() => getCurrentDate(currentDate), 1000);
 	});
@@ -42,7 +47,14 @@
 				</div>
 				<div class="header-right">
 					<div class="header-right-date">{{ currentDate }}</div>
-					<div class="header-right-name">{{ userName }}</div>
+					<a-dropdown>
+						<a class="header-right-name">{{ userName }}</a>
+						<template #overlay>
+							<a-menu>
+								<a-menu-item @click="handleLogout"> 退出登录 </a-menu-item>
+							</a-menu>
+						</template>
+					</a-dropdown>
 					<a-avatar src="/avatar.gif" />
 				</div>
 			</div>

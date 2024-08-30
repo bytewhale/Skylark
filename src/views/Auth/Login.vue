@@ -75,20 +75,20 @@
 			<h5>{{ formTitle }}</h5>
 			<a-form :model="formState" @finish="onFinish" @finishFailed="onFinishFailed" :labelCol="{ span: 4 }">
 				<a-form-item label="用户名" name="userName" :rules="[{ required: true, message: '请输入用户名!' }]" v-if="!isLoginMode">
-					<a-input v-model:value="formState.userName">
+					<a-input v-model:value="formState.userName" size="large">
 						<template #prefix>
 							<UserOutlined class="site-form-item-icon" />
 						</template>
 					</a-input>
 				</a-form-item>
 				<a-form-item label="手机号" name="phone" :rules="[{ required: true, message: '请输入手机号!' }]">
-					<a-input v-model:value="formState.phone">
+					<a-input v-model:value="formState.phone" size="large">
 						<template #prefix> <PhoneOutlined class="site-form-item-icon" /> </template>
 					</a-input>
 				</a-form-item>
 
 				<a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
-					<a-input-password v-model:value="formState.password">
+					<a-input-password v-model:value="formState.password" size="large">
 						<template #prefix>
 							<LockOutlined class="site-form-item-icon" />
 						</template>
@@ -96,7 +96,7 @@
 				</a-form-item>
 
 				<a-form-item>
-					<a-button :disabled="disabled" block type="primary" size="middle" html-type="submit" class="login-form-button">{{
+					<a-button :disabled="disabled" block type="primary" size="large" html-type="submit" class="login-form-button">{{
 						isLoginMode ? '登录' : '注册/登录'
 					}}</a-button>
 				</a-form-item>
