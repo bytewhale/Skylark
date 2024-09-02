@@ -3,8 +3,8 @@ import { useAuthStore } from '@/stores/authStore';
 import { message } from 'ant-design-vue';
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api',
-  timeout: 60000,
+  baseURL: 'http://localhost:3002/api',
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
   },
@@ -75,7 +75,7 @@ export const http = {
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
     return axiosInstance.post(url, data, config).then(res => res.data);
   },
-  download<T = any>(url: string, data?: any, fileName = '工作日志'): Promise<T> {
+  download<T = any>(url: string, data?: any, fileName = `工作汇报表-${Date.now()}`): Promise<T> {
     return axiosInstance.post(url, data, { responseType: 'blob' }).then((res: any) => {
       if (res) {
         if (res.size < 200) {

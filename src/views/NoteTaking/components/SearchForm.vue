@@ -39,10 +39,6 @@
 	}
 	const handleExport = async () => {
 		try {
-			if (!formState.caseType) {
-				message.warning('请选择案件类型');
-				return;
-			}
 			if (!formState.createTimeRange.length) {
 				message.warning('请选择时间范围');
 				return;
