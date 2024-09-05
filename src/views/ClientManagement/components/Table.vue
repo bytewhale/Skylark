@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { onMounted, ref } from 'vue';
-	import { formatDate } from '@/utils/util';
+	import { formatDate, formatMoney } from '@/utils/util';
 
 	export interface IDataItem {
 		clientId: number;
@@ -18,7 +18,7 @@
 	const columns = [
 		{ title: '客户ID', dataIndex: 'clientId', key: 'clientId' },
 		{ title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
-		{ title: '合同金额', dataIndex: 'contractAmount', key: 'contractAmount' },
+		{ title: '合同金额（元）', dataIndex: 'contractAmount', key: 'contractAmount' },
 		{ title: '付款日期', dataIndex: 'paymentDate', key: 'paymentDate' },
 		{ title: '服务开始时间', dataIndex: 'serviceEffectiveDate', key: 'serviceEffectiveDate' },
 		{ title: '服务到期时间', dataIndex: 'serviceExpirationDate', key: 'serviceExpirationDate' },
@@ -40,6 +40,9 @@
 	<div class="table">
 		<a-table v-bind="tableProps" :columns="columns" @change="pageChange" :rowKey="(record: any) => record.clientId">
 			<template #bodyCell="{ column, record }">
+				<template v-if="column.key === 'contractAmount'">
+					<div>{{ formatMoney(record.contractAmount) }}</div>
+				</template>
 				<template v-if="column.key === 'paymentDate'">
 					<div>{{ formatDate(record.paymentDate, true) }}</div>
 				</template>

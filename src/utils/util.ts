@@ -53,3 +53,11 @@ export function formatDate(dateString: string, onlyDate = false) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+
+export function formatMoney(value: number, digi = 2): string {
+  if (typeof value == 'number') {
+    return `¥${value.toFixed(digi)}`
+  }
+  return `¥${Number(value).toFixed(digi)}`
+}
+

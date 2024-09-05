@@ -366,7 +366,7 @@
 						</a-select>
 					</a-form-item>
 					<a-form-item label="服务内容" v-bind="validateInfos.serviceContent">
-						<a-textarea v-model:value="formState.serviceContent" :auto-size="{ minRows: 1, maxRows: 5 }" placeholder="请输入服务内容" />
+						<a-textarea v-model:value="formState.serviceContent" :auto-size="{ minRows: 2, maxRows: 6 }" placeholder="请输入服务内容" />
 					</a-form-item>
 					<a-form-item label="数量" v-bind="validateInfos.formState">
 						<a-input-number v-model:value="formState.count" min="1" style="width: 180px" placeholder="请输入数量" />
